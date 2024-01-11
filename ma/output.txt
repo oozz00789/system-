@@ -1,0 +1,46 @@
+ 5          COPY       START      0         
+ 185        FIRST      STL        RETADR    
+ 190        .CLOOP     RDBUFF     F1,BUFFER,LENGTH,BBB
+ 190a       CLOOP      CLEAR      X         
+ 190b                  CLEAR      A         
+ 190c                  CLEAR      S         
+ 190d                  +LDT       #4096     
+ 190e                  TD         =X'F1'    
+ 190f                  JEQ        *-3       
+ 190g                  RD         =X'F1'    
+ 190h                  COMPR      A,S       
+ 190i                  JEQ        *+11      
+ 190j                  STCH       BUFFER,X  
+ 190k                  JLT        BBB       
+ 190l                  TIXR       T         
+ 190m                  JLT        *-19      
+ 190n                  STX        LENGTH    
+ 195                   LDA        LENGTH    
+ 200                   COMP       #0        
+ 205                   JEQ        ENDFIL    
+ 210                   WRBUFF     05,BUFFER,LENGTH
+ 210a                  CLEAR      X         
+ 210b                  LDT        LENGTH    
+ 210c                  LDCH       BUFFER,X  
+ 210d                  TD         =X'05'    
+ 210e                  JEQ        *-3       
+ 210f                  WD         =X'05'    
+ 210g                  TIXR       T         
+ 210h                  JLT        *-14      
+ 215                   J          CLOOP     
+ 220        .ENDFIL    WRBUFF     05,EOF,THREE
+ 220a       ENDFIL     CLEAR      X         
+ 220b                  LDT        THREE     
+ 220c                  LDCH       EOF,X     
+ 220d                  TD         =X'05'    
+ 220e                  JEQ        *-3       
+ 220f                  WD         =X'05'    
+ 220g                  TIXR       T         
+ 220h                  JLT        *-14      
+ 225                   J          @RETADR   
+ 230        EOF        BYTE       C'EOF'    
+ 235        THREE      WORD       3         
+ 240        RETADR     RESW       1         
+ 245        LENGTH     RESW       1         
+ 250        BUFFER     RESB       4096      
+ 255                   END        FIRST     
